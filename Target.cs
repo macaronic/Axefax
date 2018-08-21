@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MKdir;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,14 @@ namespace Axefax
 
         public void Update(int msElapsed)
         {
-            Position.X = Position.X + 1;
+            if (Position.X < Game1.defaultSize.X)
+            {
+                Position.X = Position.X + 12;
+            }   else
+            {
+                Position.X = -Size.X;
+
+            }
         }
     };
 }

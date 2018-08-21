@@ -8,6 +8,7 @@ namespace MKdir
 {
     public class Game1 : Game
     {
+        public static Point defaultSize = new Point(800, 600);
         GraphicsDeviceManager graphics;
         SpriteBatch painter;
         Target Pile;
@@ -28,7 +29,9 @@ namespace MKdir
             Pile = new Target();
             Pile.Position = new Point(50, 50);
             Pile.Size = new Point(150, 150);
-            
+            graphics.PreferredBackBufferWidth = defaultSize.X;
+            graphics.PreferredBackBufferHeight = defaultSize.Y;
+            graphics.ApplyChanges();
 
 
             base.Initialize();
@@ -56,6 +59,8 @@ namespace MKdir
             if (x.LeftButton == ButtonState.Pressed) 
                 Exit();
 
+            var pCursor = x.Position;
+
             int msElapsed = (int)gameTime.ElapsedGameTime.TotalMilliseconds;
             Pile.Update(msElapsed);
 
@@ -67,6 +72,7 @@ namespace MKdir
             painter.Begin();
             // TODO: Add your drawing code here
             Pile.Draw(painter);
+            
             painter.End();
 
 

@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace MKdir
@@ -9,12 +11,12 @@ namespace MKdir
     public class Game1 : Game
     {
         public static Point defaultSize = new Point(800, 600);
+        static Random rnd = new Random();
         GraphicsDeviceManager graphics;
         SpriteBatch painter;
-        Target Pile;
+        List<Target> Flox = new List<Target>();
 
 
-        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -25,10 +27,16 @@ namespace MKdir
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
-            Pile = new Target();
-            Pile.Position = new Point(50, 50);
-            Pile.Size = new Point(150, 150);
+            int Ncount = rnd.Next(5, 12);
+            for (int i = 0; i < Ncount; i++)
+            {
+                int yPoss = rnd.Next(10, 600);
+                int xPoss = rnd.Next(0, defaultSize.X);
+                var Pile = new Target();
+                Pile.Position = new Point(xPoss, yPoss);
+                Pile.Size = new Point(150, 150);
+                Flox.Add(Pile);
+            }
             graphics.PreferredBackBufferWidth = defaultSize.X;
             graphics.PreferredBackBufferHeight = defaultSize.Y;
             graphics.ApplyChanges();
@@ -40,29 +48,30 @@ namespace MKdir
         protected override void LoadContent()
         {
             painter = new SpriteBatch(GraphicsDevice);
-            
+
 
             var stream = File.OpenRead("content/Pile.png");
 
             var Textura_pile = Texture2D.FromStream(GraphicsDevice, stream);
 
             stream.Dispose();
+            foreach (var pile in Flox)
+                pile.Kartinka = Textura_pile;
 
-            Pile.Kartinka = Textura_pile;
-
-            // TODO: use this.Content to load your game content here
+            // List<Te TODO: use this.Content to load your game content here
         }
 
         protected override void Update(GameTime gameTime)
         {
             var x = Mouse.GetState();
-            if (x.LeftButton == ButtonState.Pressed) 
+            if (x.LeftButton == ButtonState.Pressed)
                 Exit();
 
             var pCursor = x.Position;
 
             int msElapsed = (int)gameTime.ElapsedGameTime.TotalMilliseconds;
-            Pile.Update(msElapsed);
+            foreach (Target pile in Flox)
+            pile.Update(msElapsed);
 
         }
 
@@ -71,8 +80,11 @@ namespace MKdir
             GraphicsDevice.Clear(Color.White);
             painter.Begin();
             // TODO: Add your drawing code here
-            Pile.Draw(painter);
-            
+
+            foreach (Target pile in Flox) {
+
+                pile.Draw(painter);
+            }
             painter.End();
 
 

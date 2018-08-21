@@ -63,16 +63,13 @@ namespace MKdir
 
         protected override void Update(GameTime gameTime)
         {
-            var x = Mouse.GetState();
-            if (x.LeftButton == ButtonState.Pressed)
-                Exit();
+         
 
-            var pCursor = x.Position;
 
             int msElapsed = (int)gameTime.ElapsedGameTime.TotalMilliseconds;
             foreach (Target pile in Flox)
             pile.Update(msElapsed);
-
+            Flox.RemoveAll(x => x.life <= 0);
         }
 
         protected override void Draw(GameTime gameTime)
